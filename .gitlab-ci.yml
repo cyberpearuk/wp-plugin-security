@@ -1,0 +1,30 @@
+
+stages:
+    - check
+    - test
+    - deploy
+    
+cache:
+  paths:
+    - vendor/
+
+phpcs_phan:
+    stage: check
+    image: cyberpearuk/php-build-docker
+    script:
+        - composer global config http-basic.nexus.jbuncle.co.uk composer-publisher $NEXUS_PASS 
+        - composer install
+        - vendor/bin/phpcs -n -s --standard=php-standards ./src
+        - vendor/bin/phpcs -n -s --standard=php-standards ./tests
+        - vendor/bin/phpcs -n -s --standard=php-standards ./*.php
+        - phan
+
+tag:
+    stage: deploy
+    image: docker.jbuncle.co.uk/jbuncle/php-autosemver
+    script:
+        - composer global config http-basic.nexus.jbuncle.co.uk composer-publisher $NEXUS_PASS 
+        - tag
+    only:
+        refs:
+            - master

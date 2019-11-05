@@ -1,0 +1,43 @@
+{
+    "name": "cyberpearuk/wp-plugin-security",
+    "description": "WordPress Security Plugin",
+    "type": "library",
+    "authors": [
+        {
+            "name": "James Buncle",
+            "email": "jbuncle@hotmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "CyberPear\\WpPluginSecurity\\": "src/"
+        }
+    },
+    "repositories": [
+        {
+            "url": "https://nexus.jbuncle.co.uk/repository/composer-private/",
+            "type": "composer"
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "wordpress/wordpress",
+                "version": "5.2.0",
+                "dist": {
+                    "url": "https://github.com/wordpress/wordpress/archive/5.2-branch.zip",
+                    "type": "zip"
+                }
+            }
+        }
+    ],
+    "require": {
+        "php": ">=7.1"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-master",
+        "jbuncle/php-standards": "@stable",
+        "phpunit/phpunit": "^8.2",
+        "phpunit/php-code-coverage": "^7.0",
+        "wordpress/wordpress": "^5.2"
+    }
+}

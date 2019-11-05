@@ -1,0 +1,4 @@
+/vendor/
+/nbproject/private/
+/composer.lock
+/.phpunit.result.cache
