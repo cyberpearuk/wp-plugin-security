@@ -16,21 +16,27 @@ use CyberPear\WpThemeSecurity\PHPPasswordHashingFeature;
 require_once __DIR__ . '/src/WPPasswordHashingFeature.php';
 require_once __DIR__ . '/src/PHPPasswordHashingFeature.php';
 
-if (function_exists('wp_hash_password') 
-        || function_exists('wp_check_password')
-        || function_exists('wp_set_password')) {
-    
-    error_log('Password functions already defined.');
-}
-if (!function_exists('wp_hash_password')) {
+if (function_exists('wp_hash_password') ||
+        function_exists('wp_check_password') ||
+        function_exists('wp_set_password')) {
+    add_action('admin_notices', function () {
+        ?>
+        <div class="notice notice-error">
+
+            <h2>Important WP Plugin Security Notice</h2>
+            <p>
+                A password function is already defined. WP Plugin Security won&apos;t
+                be able to work properly, either resolve the issue (e.g. by removing the conflicting plugin)
+                or by removing the WP Plugin Security.
+            </p>
+        </div>
+        <?php
+    });
+} else {
 
     function wp_hash_password(string $password) {
         return PHPPasswordHashingFeature::getInstance()->hashPassword($password);
     }
-
-}
-
-if (!function_exists('wp_check_password')) {
 
     function wp_check_password(string $password, string $hash, $userId = ''): bool {
         if (empty($userId)) {
@@ -40,10 +46,6 @@ if (!function_exists('wp_check_password')) {
         $userId = intval($userId);
         return PHPPasswordHashingFeature::getInstance()->passwordCheck($password, $hash, $userId);
     }
-
-}
-
-if (!function_exists('wp_set_password')) {
 
     function wp_set_password(string $password, $userId = '') {
         if (empty($userId)) {
