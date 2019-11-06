@@ -12,7 +12,9 @@
 defined('ABSPATH') or die('Access denied');
 
 use CyberPear\WpThemeSecurity\PHPPasswordHashingFeature;
+use CyberPear\WpThemeSecurity\WpPluginSecurityException;
 
+require_once __DIR__ . '/src/WpPluginSecurityException.php';
 require_once __DIR__ . '/src/WPPasswordHashingFeature.php';
 require_once __DIR__ . '/src/PHPPasswordHashingFeature.php';
 
@@ -40,7 +42,7 @@ if (function_exists('wp_hash_password') ||
 
     function wp_check_password(string $password, string $hash, $userId = ''): bool {
         if (empty($userId)) {
-            throw new Exception("Missing user ID");
+            throw new WpPluginSecurityException("Missing user ID");
         }
 
         $userId = intval($userId);
@@ -49,7 +51,7 @@ if (function_exists('wp_hash_password') ||
 
     function wp_set_password(string $password, $userId = '') {
         if (empty($userId)) {
-            throw new Exception("Missing user ID");
+            throw new WpPluginSecurityException("Missing user ID");
         }
 
         $userId = intval($userId);
