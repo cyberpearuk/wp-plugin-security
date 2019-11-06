@@ -1,11 +1,10 @@
-
 language: php
 
 php:
   - 7.1
 
 script:
-    - sed -i -e "s/Version: development/Version: $TRAVIS_BRANCH/g" wp-plugin-security.php
+    - sed -i -e "s/\$_VERSION/${TRAVIS_BRANCH}/g" wp-plugin-security.php
     - zip wp-plugin-security.zip ./* -x *.zip ./vendor *.xml ./nbproject/*.xml composer.lock composer.json
 
 deploy:

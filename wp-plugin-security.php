@@ -4,7 +4,7 @@
  *
  * Plugin Name: WP Security Plugin
  * Description: Replaces WordPress password functions with native PHP password functions.
- * Version: development
+ * Version: $_VERSION
  *
  * phpcs:disable SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
  * phpcs:disable Generic.NamingConventions.CamelCapsFunctionName.NotCamelCaps
