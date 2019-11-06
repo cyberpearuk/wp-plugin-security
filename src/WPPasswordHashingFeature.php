@@ -10,7 +10,7 @@ use function wp_hash_password;
 use function wp_set_password;
 
 /**
- * WPPasswordHashingFeature - Recreates core WP password functionality using hooks.
+ * WPPasswordHashingFeature - Recreates core WP password functionality.
  *
  * @author jbuncle
  */
