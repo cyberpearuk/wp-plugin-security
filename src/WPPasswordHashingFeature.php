@@ -38,7 +38,8 @@ class WPPasswordHashingFeature {
         $check = $this->doPasswordCheck($password, $hash);
 
         if ($check && $userId) {
-            if (\apply_filters('wp_check_rehash_password', false, $hash)) {
+            $requiresRehash = $this->requiresRehash($hash);
+            if (\apply_filters('wp_check_rehash_password', $requiresRehash, $hash)) {
                 // Set new password hash using plain text password
                 wp_set_password($password, $userId);
                 // Redo hash to update the one we're dealing with

@@ -108,7 +108,7 @@ class PHPPasswordHashingFeature extends WPPasswordHashingFeature {
 
     protected function doPasswordCheck(string $password, string $hash): bool {
         $info = \password_get_info($hash);
-        if (!empty($info['algo'])) {
+        if ($info['algo'] !== 0) {
             return \password_verify($password, $hash);
         }
 
