@@ -5,7 +5,7 @@ php:
 
 script:
     - sed -i -e "s/\$_VERSION/${TRAVIS_BRANCH}/g" wp-plugin-security.php
-    - zip wp-plugin-security.zip ./* -x *.zip ./vendor *.xml ./nbproject/*.xml composer.lock composer.json
+    - zip -r wp-plugin-security.zip ./** -x "vendor/*" "*.xml" "nbproject/*" "composer.lock" "composer.json"
 
 deploy:
     provider: releases
