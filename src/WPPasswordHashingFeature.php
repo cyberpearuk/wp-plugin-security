@@ -107,7 +107,6 @@ class WPPasswordHashingFeature {
                 ]
         );
 
-        /* @phan-suppress-next-line PhanUndeclaredFunction */
         \wp_cache_delete($userId, 'users');
 
         return true;

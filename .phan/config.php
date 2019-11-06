@@ -15,6 +15,7 @@ return [
     'file_list' => [
         'wp-plugin-security.php',
         'vendor/wordpress/wordpress/wp-includes/plugin.php',
+        'vendor/wordpress/wordpress/wp-includes/cache.php',
         'vendor/wordpress/wordpress/wp-includes/class-phpass.php',
         'vendor/wordpress/wordpress/wp-load.php'
     ],
