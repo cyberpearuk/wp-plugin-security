@@ -1,6 +1,6 @@
 {
     "name": "cyberpearuk/wp-plugin-security",
-    "description": "WordPress Security Plugin",
+    "description": "Replaces WordPress password functions with native PHP password functions.",
     "type": "library",
     "authors": [
         {

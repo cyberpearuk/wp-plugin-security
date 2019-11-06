@@ -1,0 +1,17 @@
+
+language: php
+
+php:
+  - 7.1
+
+script:
+    - sed -i -e "s/Version: development/Version: $TRAVIS_BRANCH/g" wp-plugin-security.php
+    - zip wp-plugin-security.zip ./* -x *.zip ./vendor *.xml ./nbproject/*.xml composer.lock composer.json
+
+deploy:
+    provider: releases
+    api_key: "$GITHUB_TOKEN"
+    file: "wp-plugin-security.zip"
+    skip_cleanup: true
+    on:
+        tags: true
