@@ -16,7 +16,10 @@ phpcs_phan:
         - composer install
         - vendor/bin/phpcs -n -s --standard=php-standards ./src
         - vendor/bin/phpcs -n -s --standard=php-standards ./
-        - phan
+        - phan --target-php-version=7.1
+        - phan --target-php-version=7.2
+        - phan --target-php-version=7.3
+        - phan --target-php-version=7.4
 
 tag:
     stage: deploy

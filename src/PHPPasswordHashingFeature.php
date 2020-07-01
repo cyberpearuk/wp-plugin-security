@@ -17,10 +17,6 @@ class PHPPasswordHashingFeature extends WPPasswordHashingFeature {
         $algo = apply_filters('wp_password_hash_algo', PASSWORD_DEFAULT);
         $options = apply_filters('wp_password_hash_options', array());
 
-        if (!is_int($algo)) {
-            throw new WpPluginSecurityException("Bad algorithm provided");
-        }
-
         if (!is_array($options) && $options !== null) {
             throw new WpPluginSecurityException("Bad options provided");
         }
