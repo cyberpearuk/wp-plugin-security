@@ -16,9 +16,6 @@ use function wp_set_password;
  */
 class WPPasswordHashingFeature {
 
-    public function __construct() {
-    }
-
     /**
      *
      * @var WPPasswordHashingFeature
@@ -31,6 +28,9 @@ class WPPasswordHashingFeature {
         }
 
         return self::$instance;
+    }
+
+    public function __construct() {
     }
 
     public function passwordCheck(

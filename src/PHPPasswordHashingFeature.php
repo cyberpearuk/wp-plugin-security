@@ -14,17 +14,31 @@ class PHPPasswordHashingFeature extends WPPasswordHashingFeature {
 
     public function hashPassword(string $plainTextPassword): string {
         // Hook to allow options to be defined by other plugins/themes
-        $algo = apply_filters('wp_password_hash_algo', PASSWORD_DEFAULT);
+        $algo = $this->getAlgo();
         $options = apply_filters('wp_password_hash_options', array());
 
         if (!is_array($options) && $options !== null) {
             throw new WpPluginSecurityException("Bad options provided");
         }
 
+        return $this->passwordHash($plainTextPassword, $algo, $options);
+    }
+
+    /**
+     *
+     * @param string $plainTextPassword
+     * @param string|int $algo
+     * @param ?array<string,mixed> $options
+     * @return string
+     * @throws WpPluginSecurityException
+     */
+    private function passwordHash(string $plainTextPassword, $algo, ?array $options): string {
         if (is_array($options)) {
             $this->validatePasswordOptions($algo, $options);
+            /* @phan-suppress-next-line PhanPartialTypeMismatchArgumentInternal */
             $hash = \password_hash($plainTextPassword, $algo, $options);
         } else {
+            /* @phan-suppress-next-line PhanPartialTypeMismatchArgumentInternal */
             $hash = \password_hash($plainTextPassword, $algo);
         }
 
@@ -37,12 +51,21 @@ class PHPPasswordHashingFeature extends WPPasswordHashingFeature {
 
     /**
      *
-     * @param int $algo
+     * @return int|string
+     */
+    private function getAlgo() {
+        /** @var string|int $algo */
+        return apply_filters('wp_password_hash_algo', PASSWORD_DEFAULT);
+    }
+
+    /**
+     *
+     * @param int|string $algo
      * @param array<string,mixed> $options
      *
      * @return void
      */
-    private function validatePasswordOptions(int $algo, array $options): void {
+    private function validatePasswordOptions($algo, array $options): void {
         // Also check against DEFAULT as although it's currently the same
         // there's a higher chance of a future algorithm having the same options
         if ($algo === PASSWORD_BCRYPT || $algo === PASSWORD_DEFAULT) {
@@ -117,8 +140,8 @@ class PHPPasswordHashingFeature extends WPPasswordHashingFeature {
             return true;
         }
 
-        // Not already rehashing
-        return \password_needs_rehash($hash, PASSWORD_DEFAULT);
+        /* @phan-suppress-next-line PhanPartialTypeMismatchArgumentInternal */
+        return \password_needs_rehash($hash, $this->getAlgo());
     }
 
 }
