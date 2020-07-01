@@ -11,7 +11,6 @@ return [
         "PhanUnreferencedUseNormal", // Doesn't work with @var
         "PhanUndeclaredInterface", // Doesn't work correctly with using inteface from vendor
     ],
-    "target_php_version" => '7.1',
     'file_list' => [
         'wp-plugin-security.php',
         'vendor/wordpress/wordpress/wp-includes/plugin.php',
