@@ -28,7 +28,7 @@ class PHPPasswordHashingFeature extends WPPasswordHashingFeature {
      *
      * @param string $plainTextPassword
      * @param string|int $algo
-     * @param ?array<string,mixed> $options
+     * @param array<string,mixed>|null $options
      * @return string
      * @throws WpPluginSecurityException
      */
