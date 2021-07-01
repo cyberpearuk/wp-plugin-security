@@ -22,9 +22,9 @@
             "type": "package",
             "package": {
                 "name": "wordpress/wordpress",
-                "version": "5.2.0",
+                "version": "5.7.2",
                 "dist": {
-                    "url": "https://github.com/wordpress/wordpress/archive/5.2-branch.zip",
+                    "url": "https://github.com/wordpress/wordpress/archive/5.7.2.zip",
                     "type": "zip"
                 }
             }
@@ -38,6 +38,6 @@
         "jbuncle/php-standards": "@stable",
         "phpunit/phpunit": "^8.2",
         "phpunit/php-code-coverage": "^7.0",
-        "wordpress/wordpress": "^5.2"
+        "wordpress/wordpress": "^5.7.2"
     }
 }
