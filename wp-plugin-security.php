@@ -22,7 +22,7 @@ require_once __DIR__ . '/src/PHPPasswordHashingFeature.php';
 if (function_exists('wp_hash_password') ||
         function_exists('wp_check_password') ||
         function_exists('wp_set_password')) {
-    add_action('admin_notices', function () {
+    add_action('admin_notices', function (): void {
         ?>
         <div class="notice notice-error">
 
@@ -37,10 +37,24 @@ if (function_exists('wp_hash_password') ||
     });
 } else {
 
-    function wp_hash_password(string $password) {
+    /**
+     *
+     * @param string $password
+     *
+     * @return string
+     */
+    function wp_hash_password(string $password): string {
         return PHPPasswordHashingFeature::getInstance()->hashPassword($password);
     }
 
+    /**
+     *
+     * @param string $password
+     * @param string $hash
+     * @param string|int $userId
+     *
+     * @return bool
+     */
     function wp_check_password(string $password, string $hash, $userId = ''): bool {
         if (empty($userId)) {
             throw new WpPluginSecurityException("Missing user ID");
@@ -50,7 +64,13 @@ if (function_exists('wp_hash_password') ||
         return PHPPasswordHashingFeature::getInstance()->passwordCheck($password, $hash, $userId);
     }
 
-    function wp_set_password(string $password, $userId = '') {
+    /**
+     *
+     * @param string $password
+     * @param string|int $userId
+     * @return bool
+     */
+    function wp_set_password(string $password, $userId = ''): bool {
         if (empty($userId)) {
             throw new WpPluginSecurityException("Missing user ID");
         }
