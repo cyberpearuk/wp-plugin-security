@@ -1,25 +1,49 @@
 
 stages:
+    - deps
     - check
-    - test
     - deploy
-    
+
 cache:
   paths:
-    - vendor/
+    - /root/.cache/composer/
 
-phpcs_phan:
-    stage: check
+vendor:
+    stage: deps
     image: cyberpearuk/php-build-docker
     script:
         - composer global config http-basic.nexus.jbuncle.co.uk composer-publisher $NEXUS_PASS 
         - composer install
+    artifacts:
+        paths:
+            - vendor/
+
+phpcs:
+    stage: check
+    image: cyberpearuk/php-build-docker
+    dependencies:
+        - vendor
+    script:
         - vendor/bin/phpcs -n -s --standard=php-standards ./src
-        - vendor/bin/phpcs -n -s --standard=php-standards ./
-        - phan --target-php-version=7.1
-        - phan --target-php-version=7.2
-        - phan --target-php-version=7.3
+        - vendor/bin/phpcs -n -s --standard=php-standards ./tests
+
+phan:
+    stage: check
+    image: jbuncle/php-build-phan
+    dependencies:
+        - vendor
+    script:
         - phan --target-php-version=7.4
+        - phan --target-php-version=8.0
+
+phpunit:
+    stage: check
+    image: cyberpearuk/php-build-docker
+    dependencies:
+        - vendor
+    script:
+        - vendor/bin/phpunit --configuration phpunit.xml --coverage-text --colors=never
+    coverage: '/^\s*Lines:\s*\d+.\d+\%/'
 
 tag:
     stage: deploy
@@ -29,3 +53,16 @@ tag:
     only:
         refs:
             - master
+
+deploy_tag:
+    stage: deploy
+    image: jbuncle/composer-nexus-upload
+    script:
+        - nexus-upload
+         --repository=https://nexus.jbuncle.co.uk/repository/composer-private/ 
+         --username=composer-publisher 
+         --password=$NEXUS_PASS 
+         --version=$CI_COMMIT_TAG
+         --ignore="/^(nbproject.*|\.gitlab\-ci\.yml|\.phan.*|tests.*|phpunit\.xml)$/"
+    only:
+        - tags
