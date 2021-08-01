@@ -25,7 +25,6 @@ phpcs:
         - vendor
     script:
         - vendor/bin/phpcs -n -s --standard=php-standards ./src
-        - vendor/bin/phpcs -n -s --standard=php-standards ./tests
 
 phan:
     stage: check
@@ -35,15 +34,6 @@ phan:
     script:
         - phan --target-php-version=7.4
         - phan --target-php-version=8.0
-
-phpunit:
-    stage: check
-    image: cyberpearuk/php-build-docker
-    dependencies:
-        - vendor
-    script:
-        - vendor/bin/phpunit --configuration phpunit.xml --coverage-text --colors=never
-    coverage: '/^\s*Lines:\s*\d+.\d+\%/'
 
 tag:
     stage: deploy
