@@ -15,6 +15,7 @@ vendor:
         - composer global config http-basic.nexus.jbuncle.co.uk composer-publisher $NEXUS_PASS 
         - composer install
     artifacts:
+        expire_in: 1 day
         paths:
             - vendor/
 
