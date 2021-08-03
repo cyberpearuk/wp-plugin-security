@@ -2,6 +2,7 @@
 stages:
     - deps
     - check
+    - build
     - deploy
 
 cache:
@@ -35,7 +36,6 @@ phan:
     script:
         - phan --target-php-version=7.4
         - phan --target-php-version=8.0
-
 tag:
     stage: deploy
     image: jbuncle/php-autosemver
@@ -49,7 +49,6 @@ tag:
 deploy_tag:
     stage: deploy
     image: jbuncle/composer-nexus-upload
-    dependencies: []
     script:
         - nexus-upload
          --repository=https://nexus.jbuncle.co.uk/repository/composer-private/ 
@@ -59,3 +58,4 @@ deploy_tag:
          --ignore="/^(nbproject.*|\.gitlab\-ci\.yml|\.phan.*|tests.*|phpunit\.xml)$/"
     only:
         - tags
+    dependencies: []
