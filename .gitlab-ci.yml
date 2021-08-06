@@ -7,22 +7,16 @@ stages:
     - publish
 
 cache:
-  paths:
-    - /root/.cache/composer/
-
-vendor:
-    stage: deps
-    image: cyberpearuk/php-build-docker
-    only:
-        refs:
-            - branches
-    script:
-        - composer global config http-basic.nexus.jbuncle.co.uk composer-publisher $NEXUS_PASS 
-        - composer install
-    artifacts:
-        expire_in: 1 day
-        paths:
-            - vendor/
+    - key: composer-cache
+      paths:
+        - /root/.cache/composer/
+        - /root/.composer/cache
+      policy: pull-push
+      
+    - key: $CI_COMMIT_REF_SLUG
+      paths:
+        - vendor
+      policy: pull-push
 
 phpcs:
     stage: check
@@ -30,9 +24,9 @@ phpcs:
     only:
         refs:
             - branches
-    needs:
-        - job: vendor
-          artifacts: true
+    before_script:
+        - composer global config http-basic.nexus.jbuncle.co.uk composer-publisher $NEXUS_PASS 
+        - composer install
     script:
         - vendor/bin/phpcs -n -s --standard=php-standards ./src
 
@@ -42,9 +36,9 @@ phan:
     only:
         refs:
             - branches
-    needs:
-        - job: vendor
-          artifacts: true
+    before_script:
+        - composer global config http-basic.nexus.jbuncle.co.uk composer-publisher $NEXUS_PASS 
+        - composer install
     script:
         - phan --target-php-version=7.4
         - phan --target-php-version=8.0
