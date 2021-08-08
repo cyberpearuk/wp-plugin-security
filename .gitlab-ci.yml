@@ -26,7 +26,7 @@ phpcs:
             - branches
     before_script:
         - composer global config http-basic.nexus.jbuncle.co.uk composer-publisher $NEXUS_PASS 
-        - composer install --ignore-platform-reqs
+        - composer install --ignore-platform-reqs --prefer-dist
     script:
         - vendor/bin/phpcs -n -s --standard=php-standards ./src
 
@@ -38,7 +38,7 @@ phan:
             - branches
     before_script:
         - composer global config http-basic.nexus.jbuncle.co.uk composer-publisher $NEXUS_PASS 
-        - composer install --ignore-platform-reqs
+        - composer install --ignore-platform-reqs --prefer-dist
     script:
         - phan --target-php-version=7.4
         - phan --target-php-version=8.0
@@ -85,7 +85,7 @@ nexus-publish:
          --username=composer-publisher 
          --password=$NEXUS_PASS 
          --version=${VERSION}
-         --ignore="/^(nbproject.*|\.gitlab\-ci\.yml|\.phan.*|tests.*|phpunit\.xml)$/"
+         --ignore="/^(vendor|nbproject|\.gitlab\-ci\.yml|\.phan|tests|phpunit\.xml)/"
     only:
         refs:
             - master
