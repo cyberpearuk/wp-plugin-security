@@ -4,7 +4,8 @@ stages:
     - check
     - build
     - version
-    - publish
+    - pack
+    - release
 
 cache:
     - key: composer-cache
@@ -18,18 +19,6 @@ cache:
         - vendor
       policy: pull-push
 
-phpcs:
-    stage: check
-    image: cyberpearuk/php-build-docker
-    only:
-        refs:
-            - branches
-    before_script:
-        - composer global config http-basic.nexus.jbuncle.co.uk composer-publisher $NEXUS_PASS 
-        - composer install --ignore-platform-reqs --prefer-dist
-    script:
-        - vendor/bin/phpcs -n -s --standard=php-standards ./src
-
 phan:
     stage: check
     image: jbuncle/php-build-phan
@@ -37,11 +26,25 @@ phan:
         refs:
             - branches
     before_script:
+        - composer global config github-oauth.github.com $GITHUB_TOKEN 
         - composer global config http-basic.nexus.jbuncle.co.uk composer-publisher $NEXUS_PASS 
         - composer install --ignore-platform-reqs --prefer-dist
     script:
         - phan --target-php-version=7.4
         - phan --target-php-version=8.0
+
+phpcs:
+    stage: check
+    image: cyberpearuk/php-build-docker
+    only:
+        refs:
+            - branches
+    before_script:
+        - composer global config github-oauth.github.com $GITHUB_TOKEN 
+        - composer global config http-basic.nexus.jbuncle.co.uk composer-publisher $NEXUS_PASS 
+        - composer install --ignore-platform-reqs --prefer-dist
+    script:
+        - vendor/bin/phpcs -n -s --standard=php-standards ./src
 
 version:
     stage: version
@@ -62,7 +65,7 @@ version:
             - master
 
 git-tag:
-    stage: publish
+    stage: release
     image: jbuncle/php-autosemver
     needs:
         - job: version
@@ -74,7 +77,7 @@ git-tag:
             - master
 
 nexus-publish:
-    stage: publish
+    stage: release
     image: jbuncle/composer-nexus-upload
     needs:
         - job: version
