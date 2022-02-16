@@ -39,5 +39,10 @@
         "phpunit/phpunit": "^8.2",
         "phpunit/php-code-coverage": "^7.0",
         "wordpress/wordpress": "^5.7.2"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     }
 }
